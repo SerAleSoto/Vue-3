@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import parts from '../data/parts';
 import { toCurrency } from '../shared/formatters';
 
@@ -72,96 +72,96 @@ function getPreviousValidIndex(index, lenght) {
 }
 
 const availableParts = parts;
-const selectedHeadIndex = 0;
-const selectedLeftArmIndex = 0;
-const selectedTorsoIndex = 0;
-const selectedRightArmIndex = 0;
-const selectedBaseIndex = 0;
-const cart = [];
+const selectedHeadIndex = ref(0);
+const selectedLeftArmIndex = ref(0);
+const selectedTorsoIndex = ref(0);
+const selectedRightArmIndex = ref(0);
+const selectedBaseIndex = ref(0);
+const cart = ref([]);
 
 const selectedRobot = computed(() => ({
-  head: availableParts.heads[selectedHeadIndex],
-  leftArm: availableParts.arms[selectedLeftArmIndex],
-  torso: availableParts.torsos[selectedTorsoIndex],
-  rightArm: availableParts.arms[selectedRightArmIndex],
-  base: availableParts.bases[selectedBaseIndex],
+  head: availableParts.heads[selectedHeadIndex.value],
+  leftArm: availableParts.arms[selectedLeftArmIndex.value],
+  torso: availableParts.torsos[selectedTorsoIndex.value],
+  rightArm: availableParts.arms[selectedRightArmIndex.value],
+  base: availableParts.bases[selectedBaseIndex.value],
 }));
 const addToCart = () => {
-  const robot = selectedRobot;
+  const robot = selectedRobot.value;
   const cost = robot.head.cost +
     robot.leftArm.cost +
     robot.torso.cost +
     robot.rightArm.cost + robot.base.cost;
-  cart.push({ ...robot, cost });
-  console.log(cart.length);
+  cart.value.push({ ...robot, cost });
+  console.log(cart.value.length);
 };
 const selectNextHead = () => {
   // eslint-disable-next-line no-const-assign
-  selectedHeadIndex = getNextValidIndex(
-    selectedHeadIndex,
+  selectedHeadIndex.value = getNextValidIndex(
+    selectedHeadIndex.value,
     availableParts.heads.length,
   );
 };
 const selectPreviousHead = () => {
   // eslint-disable-next-line no-const-assign
-  selectedHeadIndex = getPreviousValidIndex(
-    selectedHeadIndex,
+  selectedHeadIndex.value = getPreviousValidIndex(
+    selectedHeadIndex.value,
     availableParts.heads.length,
   );
 };
 const selectNextLeftArm = () => {
   // eslint-disable-next-line no-const-assign
-  selectedLeftArmIndex = getNextValidIndex(
-    selectedLeftArmIndex,
+  selectedLeftArmIndex.value = getNextValidIndex(
+    selectedLeftArmIndex.value,
     availableParts.arms.length,
   );
 };
 const selectPreviousLeftArm = () => {
   // eslint-disable-next-line no-const-assign
-  selectedLeftArmIndex = getPreviousValidIndex(
-    selectedLeftArmIndex,
+  selectedLeftArmIndex.value = getPreviousValidIndex(
+    selectedLeftArmIndex.value,
     availableParts.arms.length,
   );
 };
 const selectNextTorso = () => {
   // eslint-disable-next-line no-const-assign
-  selectedTorsoIndex = getNextValidIndex(
-    selectedTorsoIndex,
+  selectedTorsoIndex.value = getNextValidIndex(
+    selectedTorsoIndex.value,
     availableParts.torsos.length,
   );
 };
 const selectPreviousTorso = () => {
   // eslint-disable-next-line no-const-assign
-  selectedLeftArmIndex = getPreviousValidIndex(
-    selectedLeftArmIndex,
+  selectedLeftArmIndex.value = getPreviousValidIndex(
+    selectedLeftArmIndex.value,
     availableParts.torsos.length,
   );
 };
 const selectNextRightArm = () => {
   // eslint-disable-next-line no-const-assign
-  selectedRightArmIndex = getNextValidIndex(
-    selectedRightArmIndex,
+  selectedRightArmIndex.value = getNextValidIndex(
+    selectedRightArmIndex.value,
     availableParts.arms.length,
   );
 };
 const selectPreviousRightArm = () => {
   // eslint-disable-next-line no-const-assign
-  selectedRightArmIndex = getPreviousValidIndex(
-    selectedRightArmIndex,
+  selectedRightArmIndex.value = getPreviousValidIndex(
+    selectedRightArmIndex.value,
     availableParts.arms.length,
   );
 };
 const selectNextBase = () => {
   // eslint-disable-next-line no-const-assign
-  selectedBaseIndex = getNextValidIndex(
-    selectedBaseIndex,
+  selectedBaseIndex.value = getNextValidIndex(
+    selectedBaseIndex.value,
     availableParts.bases.length,
   );
 };
 const selectPreviousBase = () => {
   // eslint-disable-next-line no-const-assign
-  selectedBaseIndex = getPreviousValidIndex(
-    selectedBaseIndex,
+  selectedBaseIndex.value = getPreviousValidIndex(
+    selectedBaseIndex.value,
     availableParts.bases.length,
   );
 };
