@@ -3,7 +3,7 @@
 <div class="content">
   <button class="add-to-cart" @click="addToCart()">Add to Cart</button>
   <div class="top-row">
-    <div class="top part">
+    <div class="top part" :class="{ 'sale-border': selectedRobot.head.onSale }">
       <div class="robot-name">{{ selectedRobot.head.title }}
       <span v-if="selectedRobot.head.onSale" class="sale">Sale!</span>
       </div>
@@ -86,6 +86,7 @@ const selectedRobot = computed(() => ({
   rightArm: availableParts.arms[selectedRightArmIndex.value],
   base: availableParts.bases[selectedBaseIndex.value],
 }));
+
 const addToCart = () => {
   const robot = selectedRobot.value;
   const cost = robot.head.cost +
@@ -173,6 +174,10 @@ const selectPreviousBase = () => {
   width: 200px;
   height: 200px;
   border: 3px solid #aaa;
+}
+
+.sale-border {
+  border: 3px solid red;
 }
 
 .part img {
