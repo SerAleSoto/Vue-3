@@ -7,7 +7,7 @@
       <div class="robot-name">{{ selectedRobot.head.title }}
       <span v-if="selectedRobot.head.onSale" class="sale">Sale!</span>
       </div>
-      <PartSelector :parts="availableParts.heads" position="top"/>
+      <PartSelector :parts="availableParts.heads" position=""/>
     </div>
   </div>
   <div class="middle-row">
