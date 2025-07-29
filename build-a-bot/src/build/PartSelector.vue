@@ -12,10 +12,15 @@ import { computed, ref } from 'vue';
 
 const props = defineProps({
   parts: { type: Array, required: true },
-  position: { type: String, required: true, validator(value) { return ['left', 'rigth', 'top', 'center', 'bottom'].includes(value); } },
+  position: { type: String, required: true, validator(value) { return ['left', 'right', 'top', 'center', 'bottom'].includes(value); } },
 });
+
+const emit = defineEmits(['partSelected']);
+
 const selectedPartIndex = ref(0);
 const selectedPart = computed(() => props.parts[selectedPartIndex.value]);
+
+emit('partSelected', selectedPart);
 
 function getPreviousValidIndex(index, length) {
   const deprecatedIndex = index - 1;
@@ -40,6 +45,8 @@ const selectPreviousPart = () => {
     selectedPartIndex.value,
     props.parts.length,
   );
+  emit('partSelected', selectedPart);
+  console.log(selectedPart.value);
 };
 </script>
 
