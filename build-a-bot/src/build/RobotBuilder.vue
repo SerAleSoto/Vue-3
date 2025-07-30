@@ -1,3 +1,4 @@
+<!-- eslint-disable vuejs-accessibility/alt-text -->
 <!-- eslint-disable no-const-assign -->
 <template>
 <div class="content">
