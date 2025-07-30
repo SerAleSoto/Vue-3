@@ -1,40 +1,43 @@
+<!-- eslint-disable vuejs-accessibility/alt-text -->
 <!-- eslint-disable no-const-assign -->
 <template>
 <div class="content">
+<div class="preview">
+  <div class="preview-content">
+    <div class="top-row">
+      <img :src="selectedRobot.head.imageUrl" />
+    </div>
+    <div class="middle-row">
+      <img :src="selectedRobot.leftArm.imageUrl" class="rotate-left" />
+      <img :src="selectedRobot.torso.imageUrl" />
+      <img :src="selectedRobot.rightArm.imageUrl" class="rotate-right" />
+    </div>
+    <div class="bottom-row">
+      <img :src="selectedRobot.base.imageUrl" />
+    </div>
+  </div>
+</div>
   <button class="add-to-cart" @click="addToCart()">Add to Cart</button>
   <div class="top-row">
     <div class="top part" :class="{ 'sale-border': selectedRobot.head.onSale }">
       <div class="robot-name">{{ selectedRobot.head.title }}
       <span v-if="selectedRobot.head.onSale" class="sale">Sale!</span>
       </div>
-      <img :src="selectedRobot.head.imageUrl" alt="head" />
-      <button @click="selectPreviousHead()" class="prev-selector">&#9668;</button>
-      <button @click="selectNextHead()" class="next-selector">&#9658;</button>
+      <PartSelector :parts="availableParts.heads" position="top" @partSelected="part =>
+      selectedRobot.head=part" />
     </div>
   </div>
   <div class="middle-row">
-    <div class="left part">
-      <img :src="selectedRobot.leftArm.imageUrl" alt="left arm" />
-      <button @click="selectPreviousLeftArm()"  class="prev-selector">&#9650;</button>
-      <button @click="selectNextLeftArm()" class="next-selector">&#9660;</button>
-    </div>
-    <div class="center part">
-      <img :src="selectedRobot.torso.imageUrl" alt="torso" />
-      <button @click="selectPreviousTorso()"  class="prev-selector">&#9668;</button>
-      <button @click="selectNextTorso()" class="next-selector">&#9658;</button>
-    </div>
-    <div class="right part">
-      <img :src="selectedRobot.rightArm.imageUrl" alt="right arm" />
-      <button @click="selectPreviousRightArm()"  class="prev-selector">&#9650;</button>
-      <button @click="selectNextRightArm()" class="next-selector">&#9660;</button>
-    </div>
+    <PartSelector :parts="availableParts.arms" position="left" @partSelected="part =>
+    selectedRobot.leftArm=part"  />
+    <PartSelector :parts="availableParts.torsos" position="center" @partSelected="part =>
+    selectedRobot.torso=part"  />
+    <PartSelector :parts="availableParts.arms" position="right" @partSelected="part =>
+    selectedRobot.rightArm=part" />
   </div>
   <div class="bottom-row">
-    <div class="bottom part">
-      <img :src="selectedRobot.base.imageUrl" alt="base" />
-      <button @click="selectPreviousBase()" class="prev-selector">&#9668;</button>
-      <button @click="selectNextBase()" class="next-selector">&#9658;</button>
-    </div>
+   <PartSelector :parts="availableParts.bases" position="bottom" @partSelected="part =>
+   selectedRobot.base=part"  />
   </div>
 </div>
 <div>
@@ -57,35 +60,21 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import parts from '../data/parts';
 import { toCurrency } from '../shared/formatters';
-
-function getNextValidIndex(index, lenght) {
-  const incrementedIndex = index + 1;
-  return incrementedIndex > lenght - 1 ? 0 : incrementedIndex;
-}
-
-function getPreviousValidIndex(index, lenght) {
-  const deprecatedIndex = index - 1;
-  return deprecatedIndex < 0 ? lenght - 1 : deprecatedIndex;
-}
+import PartSelector from './PartSelector.vue';
 
 const availableParts = parts;
-const selectedHeadIndex = ref(0);
-const selectedLeftArmIndex = ref(0);
-const selectedTorsoIndex = ref(0);
-const selectedRightArmIndex = ref(0);
-const selectedBaseIndex = ref(0);
 const cart = ref([]);
 
-const selectedRobot = computed(() => ({
-  head: availableParts.heads[selectedHeadIndex.value],
-  leftArm: availableParts.arms[selectedLeftArmIndex.value],
-  torso: availableParts.torsos[selectedTorsoIndex.value],
-  rightArm: availableParts.arms[selectedRightArmIndex.value],
-  base: availableParts.bases[selectedBaseIndex.value],
-}));
+const selectedRobot = ref({
+  head: {},
+  leftArm: {},
+  torso: {},
+  rightArm: {},
+  base: {},
+});
 
 const addToCart = () => {
   const robot = selectedRobot.value;
@@ -95,76 +84,6 @@ const addToCart = () => {
     robot.rightArm.cost + robot.base.cost;
   cart.value.push({ ...robot, cost });
   console.log(cart.value.length);
-};
-const selectNextHead = () => {
-  // eslint-disable-next-line no-const-assign
-  selectedHeadIndex.value = getNextValidIndex(
-    selectedHeadIndex.value,
-    availableParts.heads.length,
-  );
-};
-const selectPreviousHead = () => {
-  // eslint-disable-next-line no-const-assign
-  selectedHeadIndex.value = getPreviousValidIndex(
-    selectedHeadIndex.value,
-    availableParts.heads.length,
-  );
-};
-const selectNextLeftArm = () => {
-  // eslint-disable-next-line no-const-assign
-  selectedLeftArmIndex.value = getNextValidIndex(
-    selectedLeftArmIndex.value,
-    availableParts.arms.length,
-  );
-};
-const selectPreviousLeftArm = () => {
-  // eslint-disable-next-line no-const-assign
-  selectedLeftArmIndex.value = getPreviousValidIndex(
-    selectedLeftArmIndex.value,
-    availableParts.arms.length,
-  );
-};
-const selectNextTorso = () => {
-  // eslint-disable-next-line no-const-assign
-  selectedTorsoIndex.value = getNextValidIndex(
-    selectedTorsoIndex.value,
-    availableParts.torsos.length,
-  );
-};
-const selectPreviousTorso = () => {
-  // eslint-disable-next-line no-const-assign
-  selectedLeftArmIndex.value = getPreviousValidIndex(
-    selectedLeftArmIndex.value,
-    availableParts.torsos.length,
-  );
-};
-const selectNextRightArm = () => {
-  // eslint-disable-next-line no-const-assign
-  selectedRightArmIndex.value = getNextValidIndex(
-    selectedRightArmIndex.value,
-    availableParts.arms.length,
-  );
-};
-const selectPreviousRightArm = () => {
-  // eslint-disable-next-line no-const-assign
-  selectedRightArmIndex.value = getPreviousValidIndex(
-    selectedRightArmIndex.value,
-    availableParts.arms.length,
-  );
-};
-const selectNextBase = () => {
-  // eslint-disable-next-line no-const-assign
-  selectedBaseIndex.value = getNextValidIndex(
-    selectedBaseIndex.value,
-    availableParts.bases.length,
-  );
-};
-const selectPreviousBase = () => {
-  // eslint-disable-next-line no-const-assign
-  selectedBaseIndex.value = getPreviousValidIndex(
-    selectedBaseIndex.value,
-    availableParts.bases.length,
-  );
 };
 </script>
 
@@ -294,6 +213,32 @@ const selectPreviousBase = () => {
 
 .content {
   position: relative;
+}
+
+.preview {
+  position: absolute;
+  top: -20px;
+  right: 0;
+  width: 310px;
+  height: 310px;
+  padding: 5px;
+}
+
+.preview-content {
+  border: 1px solid #999;
+}
+
+.preview img {
+  width: 70px;
+  height: 70px;
+}
+
+.rotate-right {
+  transform: rotate(90deg);
+}
+
+.rotate-left {
+  transform: rotate(-90deg);
 }
 
 .add-to.cart {
