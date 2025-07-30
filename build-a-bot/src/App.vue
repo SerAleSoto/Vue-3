@@ -25,6 +25,14 @@ export default {
   components: {
     RobotBuilder,
   },
+  data() {
+    return {
+      user: { userName: 'Jim' },
+    };
+  },
+  provide() {
+    return { user: this.user };
+  },
 };
 </script>
 

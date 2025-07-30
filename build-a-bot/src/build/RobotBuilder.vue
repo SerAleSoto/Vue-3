@@ -3,6 +3,7 @@
 <template>
 <div class="content">
 <div class="preview">
+  <CollapsibleSection>
   <div class="preview-content">
     <div class="top-row">
       <img :src="selectedRobot.head.imageUrl" />
@@ -16,8 +17,9 @@
       <img :src="selectedRobot.base.imageUrl" />
     </div>
   </div>
-</div>
+  </CollapsibleSection>
   <button class="add-to-cart" @click="addToCart()">Add to Cart</button>
+</div>
   <div class="top-row">
     <div class="top part" :class="{ 'sale-border': selectedRobot.head.onSale }">
       <div class="robot-name">{{ selectedRobot.head.title }}
@@ -64,6 +66,7 @@ import { ref } from 'vue';
 import parts from '../data/parts';
 import { toCurrency } from '../shared/formatters';
 import PartSelector from './PartSelector.vue';
+import CollapsibleSection from '../shared/CollapsibleSection.vue';
 
 const availableParts = parts;
 const cart = ref([]);
